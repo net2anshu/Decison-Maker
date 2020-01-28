@@ -3,9 +3,13 @@ package com.mobisec.DecisionMaker;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +38,12 @@ public class ChooseActivity extends Activity {
 
 
     List<String> ActivityIds;
+    View previousView;
+    boolean color = false;
+    String userId;
+    EventActivity eventActivity;
+    EventActivity read_activity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +52,10 @@ public class ChooseActivity extends Activity {
         Button btn_confirm = (Button)findViewById(R.id.confirmButton);
         final TextView EventName = findViewById(R.id.title);
         final FirebaseDatabase database = com.google.firebase.database.FirebaseDatabase.getInstance();
-        final DatabaseReference myRef1 = database.getReference("Events");
+        final DatabaseReference myRef1 = database.getReference("events");
         final DatabaseReference myRef2 = database.getReference("activities");
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 
 
         activities = new ArrayList<>();
@@ -54,6 +66,25 @@ public class ChooseActivity extends Activity {
 
         ListView listView = findViewById(R.id.listActivities);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                userId = mPreferences.getString("id","default");
+                eventActivity = activities.get(position);
+
+                if (!color){
+                    view.setBackgroundColor(Color.CYAN);
+                    previousView = view;
+                    color = true;
+                } else {
+                    previousView.setBackgroundColor(Color.WHITE);
+                    view.setBackgroundColor(Color.CYAN);
+                    previousView = view;
+                }
+            }
+        });
+
 
         String eventIntent = getIntent().getStringExtra("event");
 
@@ -72,40 +103,43 @@ public class ChooseActivity extends Activity {
                     Log.i("DEXISIONMAKER",eventId);
                     if (eventId.equals(eventIntent)) {
                         ActivityIds = read_event.getActivities();
+                        Log.i("DEXISIONMAKER",ActivityIds.toString());
                         EventName.setText(read_event.getName());
                     }
                     adapter.notifyDataSetChanged();
 
                 }
-            }
+                myRef2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        activities.clear();
+                        adapter.clear();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            EventActivity eventActivity = new EventActivity();
+                            Log.i("DEXISIONMAKER","Reading activities");
 
-            }
-        });
-
-        myRef2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                activities.clear();
-                adapter.clear();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    EventActivity eventActivity = new EventActivity();
-
-                    EventActivity read_activity = snapshot.getValue(EventActivity.class);
-                    if (ActivityIds != null){
-                        for (int i=0;i < ActivityIds.size();i++){
-                            if(ActivityIds.get(i).equals(read_activity.getId())){
-                                activities.add(read_activity);
+                            read_activity = snapshot.getValue(EventActivity.class);
+                            if (ActivityIds != null){
+                                Log.i("DEXISIONMAKER","Activity ids not null");
+                                for (int i=0;i < ActivityIds.size();i++){
+                                    if(ActivityIds.get(i).equals(read_activity.getId())){
+                                        Log.i("DEXISIONMAKER","Activity found");
+                                        activities.add(read_activity);
+                                    }
+                                }
                             }
+
+                            adapter.notifyDataSetChanged();
+
                         }
                     }
 
-                    adapter.notifyDataSetChanged();
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
+                    }
+                });
             }
 
             @Override
@@ -113,6 +147,8 @@ public class ChooseActivity extends Activity {
 
             }
         });
+
+
 
 
 
@@ -121,8 +157,10 @@ public class ChooseActivity extends Activity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Toast.makeText(ChooseActivity.this,
-                        "Activity (?) chosen", Toast.LENGTH_SHORT)
+                        "Activity " + read_activity.getName() + " chosen", Toast.LENGTH_SHORT)
                         .show();
+                eventActivity.getregisteredUsers().add(userId);
+                myRef2.child(eventActivity.getId()).setValue(eventActivity);
                 finish();
             }
         });
