@@ -12,9 +12,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
+import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
 
 import java.util.ArrayList;
@@ -55,8 +57,8 @@ public class NewEventActivity extends Activity {
         Button addActivity = findViewById(R.id.addActivity);
         addActivity.setOnClickListener(this::popup);
 
-        Button close = findViewById(R.id.closebutton);
-        close.setOnClickListener(view -> finish());
+        Button close = findViewById(R.id.submitbutton);
+        close.setOnClickListener(view -> submit());
 
         Button shuffle = findViewById(R.id.reassignbutton);
         if (hasOverloadedActivities()) {
@@ -66,20 +68,25 @@ public class NewEventActivity extends Activity {
         shuffle.setOnClickListener(view -> reassignRandomly());
 
         Button submit = findViewById(R.id.finalizebutton);
-        submit.setOnClickListener(view -> submit());
+        submit.setOnClickListener(view -> finalizeEvent());
     }
 
     private void submit() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = pref.getString("id", "");
+        String id = pref.getString(Constants.USER_ID, "");
 
         Event event = new Event(eventId, name.getText().toString(), activities, id);
         getInstance().getReference("Events").child(eventId).setValue(event);
 
+        Toast.makeText(this, "Event submitted", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     private void reassignRandomly() {
+        // TODO
+    }
+
+    private void finalizeEvent() {
         // TODO
     }
 

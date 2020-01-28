@@ -103,15 +103,16 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/closebutton"
+                android:id="@+id/submitbutton"
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
-                android:text="Close" />
+                android:text="Submit" />
 
             <Button
                 android:id="@+id/finalizebutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:text="Finalize" />
         </LinearLayout>
 

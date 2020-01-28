@@ -40,7 +40,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/closebutton"
+                android:id="@+id/submitbutton"
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:text="Close" />

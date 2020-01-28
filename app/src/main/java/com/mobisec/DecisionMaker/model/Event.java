@@ -8,6 +8,7 @@ public class Event {
     private String name;
     private List<EventActivity> activities;
     private String adminId;
+    private boolean isFinalized;
 
     public Event(String id, String name, List<EventActivity> activities, String adminId) {
         this.id = id;
@@ -46,5 +47,13 @@ public class Event {
 
     public void setAdminId(String adminId) {
         this.adminId = adminId;
+    }
+
+    public boolean isFinalized() {
+        return isFinalized;
+    }
+
+    public void setFinalized(boolean finalized) {
+        isFinalized = finalized;
     }
 }

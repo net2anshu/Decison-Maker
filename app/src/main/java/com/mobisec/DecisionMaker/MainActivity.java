@@ -8,23 +8,21 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mobisec.DecisionMaker.utils.Constants;
+
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-
-    private SharedPreferences mPreferences;
-    private SharedPreferences.Editor mEditor;
-    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mPreferences.edit();
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor mEditor = mPreferences.edit();
 
-        id = mPreferences.getString("id","default");
+        String id = mPreferences.getString(Constants.USER_ID,"default");
 
         if (id.equals("default")) {
             id = UUID.randomUUID().toString();
