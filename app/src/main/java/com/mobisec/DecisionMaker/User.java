@@ -5,8 +5,16 @@ import java.util.Collection;
 import java.util.List;
 
 public class User {
-    private int id;
+    private String id;
     private String name;
-    List<Event> eventID = new ArrayList<Event>();
+    private Collection<String> eventID = new ArrayList<String>();
+
+    public void setuser(String id, String name,  String eventID){       //setter
+        this.id = id;
+        this.name = name;
+        this.eventID.add(eventID);
+
+    }
+
 
 }
