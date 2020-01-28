@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "932289759471",
+    "firebase_url": "https://decision-maker-45ba7.firebaseio.com",
+    "project_id": "decision-maker-45ba7",
+    "storage_bucket": "decision-maker-45ba7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932289759471:android:c0e9077706ff3c28b4731a",
+        "android_client_info": {
+          "package_name": "com.mobisec.DecisionMaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932289759471-3t435cqqqdv9qvd2hgq2jfi70s802eke.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobisec.DecisionMaker",
+            "certificate_hash": "23f96d0a69c039dc17982bf7d26b7348a07adbb4"
+          }
+        },
+        {
+          "client_id": "932289759471-it1s7kk1tjktniv4996prukaur78kv07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2QHKgvQ5x82QwyRNSuTZu_ZcSF79L3kE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932289759471-it1s7kk1tjktniv4996prukaur78kv07.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
