@@ -14,6 +14,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
 import com.mobisec.DecisionMaker.newevent.AddActivityListAdapter;
@@ -21,37 +26,81 @@ import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 import java.util.UUID;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
 public class NewEventActivity extends Activity {
 
     private List<EventActivity> activities;
 
-    String eventId;
-    TextView name;
+    private String eventId;
+    private TextView name;
+    private Button shuffle;
+    private AddActivityListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_event_activity);
 
-        eventId = RandomUtils.randomString(6);
-
         TextView codeTextView = findViewById(R.id.codeTextView);
-        codeTextView.setText(eventId);
-
         name = findViewById(R.id.namefield);
 
+        shuffle = findViewById(R.id.reassignbutton);
         activities = new ArrayList<>();
 
-        AddActivityListAdapter adapter = new AddActivityListAdapter(this, activities);
+        adapter = new AddActivityListAdapter(this, activities);
+
+        String stringExtra = getIntent().getStringExtra("event");
+        if (isNull(stringExtra)) {
+            eventId = RandomUtils.randomString(6);
+        } else {
+            eventId = stringExtra;
+            getInstance().getReference("events")
+                    .child(eventId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Event value = dataSnapshot.getValue(Event.class);
+                            name.setText(value.getName());
+
+                            getInstance().getReference("activities")
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                EventActivity value1 = snapshot.getValue(EventActivity.class);
+                                                if (value.getActivities().contains(value1.getId())) {
+                                                    activities.add(value1);
+                                                }
+                                            }
+                                            hasOverloadedActivities();
+                                            adapter.notifyDataSetChanged();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                    });
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {}
+                    });
+        }
+
+        codeTextView.setText(eventId);
 
         ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
@@ -61,11 +110,6 @@ public class NewEventActivity extends Activity {
 
         Button close = findViewById(R.id.submitbutton);
         close.setOnClickListener(view -> submit());
-
-        Button shuffle = findViewById(R.id.reassignbutton);
-        if (hasOverloadedActivities()) {
-            shuffle.setEnabled(true);
-        }
 
         shuffle.setOnClickListener(view -> reassignRandomly());
 
@@ -99,20 +143,47 @@ public class NewEventActivity extends Activity {
     }
 
     private void reassignRandomly() {
-        // TODO
+        List<String> users = activities.stream()
+                .map(EventActivity::getregisteredUsers)
+                .flatMap(Collection::stream)
+                .collect(toList());
+
+        Collections.shuffle(users);
+
+        Stack<String> stack = new Stack<>();
+        stack.addAll(users);
+
+        activities.forEach(activity -> {
+            activity.setregisteredUsers(new ArrayList<>());
+        });
+
+        boolean run = true;
+        while (run) {
+            for (EventActivity eventActivity : activities) {
+                if (stack.isEmpty()) {
+                    run = false;
+                    break;
+                }
+                if (eventActivity.getRegistered() < eventActivity.getAvailable()) {
+                    eventActivity.getregisteredUsers().add(stack.pop());
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 
     private void finalizeEvent() {
         // TODO
     }
 
-    private boolean hasOverloadedActivities() {
+    private void hasOverloadedActivities() {
         for (EventActivity a : activities) {
             if (a.getRegistered() > a.getAvailable()) {
-                return true;
+                shuffle.setEnabled(true);
+                return;
             }
         }
-        return false;
     }
 
     public void popup(View view) {
@@ -128,16 +199,11 @@ public class NewEventActivity extends Activity {
 
         Button button = popupView.findViewById(R.id.button3);
         button.setOnClickListener(view1 -> {
-            /*
-            MyContact contact = new MyContact(name.getText().toString(), number.getText().toString());
-            adapter.notifyDataSetChanged();
-            */
-
             String eventName = name.getText().toString();
             int nrParticipants = Integer.parseInt(number.getText().toString());
 
             String id = UUID.randomUUID().toString();
-            EventActivity eventActivity = new EventActivity(id, eventName, nrParticipants, 0, new ArrayList<>());
+            EventActivity eventActivity = new EventActivity(id, eventName, nrParticipants, new ArrayList<>());
             getInstance().getReference("activities").child(id).setValue(eventActivity);
             activities.add(eventActivity);
 

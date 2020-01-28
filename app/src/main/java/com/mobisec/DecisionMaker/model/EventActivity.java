@@ -7,17 +7,15 @@ public class EventActivity {
     private String id;
     private String name;
     private int available;
-    private int registered;
     private List<String> registeredUsers;
 
     public EventActivity() {
     }
 
-    public EventActivity(String id, String name, int available, int registered, List<String> registeredUsers) {
+    public EventActivity(String id, String name, int available, List<String> registeredUsers) {
         this.id = id;
         this.name = name;
         this.available = available;
-        this.registered = registered;
         this.registeredUsers = registeredUsers;
     }
 
@@ -46,11 +44,7 @@ public class EventActivity {
     }
 
     public int getRegistered() {
-        return registered;
-    }
-
-    public void setRegistered(int registered) {
-        this.registered = registered;
+        return registeredUsers.size();
     }
 
     public List<String> getregisteredUsers() {
