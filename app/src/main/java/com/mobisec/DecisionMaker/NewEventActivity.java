@@ -1,6 +1,7 @@
 package com.mobisec.DecisionMaker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -41,6 +42,7 @@ import static java.util.stream.Collectors.toList;
 
 public class NewEventActivity extends Activity {
 
+    private static final int LEN = 6;
     private List<EventActivity> activities;
 
     private String eventId;
@@ -63,7 +65,7 @@ public class NewEventActivity extends Activity {
 
         String stringExtra = getIntent().getStringExtra("event");
         if (isNull(stringExtra)) {
-            eventId = RandomUtils.randomString(6);
+            eventId = RandomUtils.randomString(LEN);
         } else {
             eventId = stringExtra;
             getInstance().getReference("events")
@@ -143,6 +145,15 @@ public class NewEventActivity extends Activity {
     }
 
     private void reassignRandomly() {
+        new AlertDialog.Builder(this)
+                .setTitle("Warning!")
+                .setMessage("Do you really want reassign?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> doReassigning())
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    private void doReassigning() {
         List<String> users = activities.stream()
                 .map(EventActivity::getregisteredUsers)
                 .flatMap(Collection::stream)
