@@ -1,19 +1,16 @@
 package com.mobisec.DecisionMaker;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.view.View;
-import android.widget.EditText;
-
-import java.util.Calendar;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
@@ -23,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(Intent.ACTION_SEND);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mEditor = mPreferences.edit();
@@ -44,16 +40,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.button2:
-
                 break;
 
             case R.id.button3:
-
                 break;
+
             case R.id.button4:
                 finish();
                 break;
-
         }
 
     }
