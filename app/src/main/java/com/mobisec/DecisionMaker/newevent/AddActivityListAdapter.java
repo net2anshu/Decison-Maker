@@ -31,7 +31,7 @@ public class AddActivityListAdapter extends ArrayAdapter<EventActivity> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.new_event_activity_row, parent, false);
         }
 
-        TextView name = convertView.findViewById(R.id.activityName);
+        TextView name = convertView.findViewById(R.id.event_name);
         TextView participants = convertView.findViewById(R.id.activityparticipants);
 
         name.setText(eventActivity.getName());
