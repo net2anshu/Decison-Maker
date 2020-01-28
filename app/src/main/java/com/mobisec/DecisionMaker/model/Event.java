@@ -6,15 +6,18 @@ public class Event {
 
     private String id;
     private String name;
-    private List<EventActivity> activities;
+    private List<String> activities;
     private String adminId;
     private boolean isFinalized;
 
-    public Event(String id, String name, List<EventActivity> activities, String adminId) {
+    public Event(String id, String name, List<String> activities, String adminId) {
         this.id = id;
         this.name = name;
         this.activities = activities;
         this.adminId = adminId;
+    }
+
+    public Event() {
     }
 
     public String getId() {
@@ -33,11 +36,11 @@ public class Event {
         this.name = name;
     }
 
-    public List<EventActivity> getActivities() {
+    public List<String> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<EventActivity> activities) {
+    public void setActivities(List<String> activities) {
         this.activities = activities;
     }
 
@@ -56,4 +59,5 @@ public class Event {
     public void setFinalized(boolean finalized) {
         isFinalized = finalized;
     }
+
 }

@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".JoinEvent" />
         <activity android:name=".NewEventActivity"/>
+        <activity android:name=".EventListActivity"/>
     </application>
 
 </manifest>

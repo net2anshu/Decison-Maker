@@ -21,10 +21,11 @@ import com.mobisec.DecisionMaker.utils.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
-import static java.lang.Integer.parseInt;
+import static java.util.stream.Collectors.toList;
 
 public class NewEventActivity extends Activity {
 
@@ -46,8 +47,6 @@ public class NewEventActivity extends Activity {
         name = findViewById(R.id.namefield);
 
         activities = new ArrayList<>();
-        activities.add(new EventActivity("Test", 1, 10));
-        activities.add(new EventActivity("Test2", 5, 5));
 
         AddActivityListAdapter adapter = new AddActivityListAdapter(this, activities);
 
@@ -73,9 +72,10 @@ public class NewEventActivity extends Activity {
 
     private void submit() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = pref.getString(Constants.USER_ID, "");
+        String userId = pref.getString(Constants.USER_ID, "");
 
-        Event event = new Event(eventId, name.getText().toString(), activities, id);
+        List<String> ids = activities.stream().map(EventActivity::getId).collect(toList());
+        Event event = new Event(eventId, name.getText().toString(), ids, userId);
         getInstance().getReference("Events").child(eventId).setValue(event);
 
         Toast.makeText(this, "Event submitted", Toast.LENGTH_SHORT).show();
@@ -114,14 +114,17 @@ public class NewEventActivity extends Activity {
         button.setOnClickListener(view1 -> {
             /*
             MyContact contact = new MyContact(name.getText().toString(), number.getText().toString());
-            getInstance().getReference("Contacts").child(Integer.toString(contact.hashCode())).setValue(contact);
             adapter.notifyDataSetChanged();
             */
 
             String eventName = name.getText().toString();
-            String nrParticipants = number.getText().toString();
-            EventActivity e = new EventActivity(eventName, 0, parseInt(nrParticipants));
-            activities.add(e);
+            int nrParticipants = Integer.parseInt(number.getText().toString());
+
+            String id = UUID.randomUUID().toString();
+            EventActivity eventActivity = new EventActivity(id, eventName, nrParticipants, 0, new ArrayList<>());
+            getInstance().getReference("activities").child(id).setValue(eventActivity);
+            activities.add(eventActivity);
+
             popupWindow.dismiss();
         });
     }

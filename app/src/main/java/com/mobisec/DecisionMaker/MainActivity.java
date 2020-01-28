@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.button2:
+                startActivity(new Intent(this, JoinEvent.class));
                 break;
 
             case R.id.button3:
+                startActivity(new Intent(this, EventListActivity.class));
                 break;
 
             case R.id.button4:
