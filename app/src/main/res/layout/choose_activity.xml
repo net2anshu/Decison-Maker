@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200pt"
+            android:orientation="horizontal">
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20pt"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/reassignbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="Reassign randomly" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20pt"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/closebutton"
+                android:layout_width="199dp"
+                android:layout_height="wrap_content"
+                android:text="Close" />
+
+            <Button
+                android:id="@+id/finalizebutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finalize" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

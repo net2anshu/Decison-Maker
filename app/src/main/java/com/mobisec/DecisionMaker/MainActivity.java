@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         id = mPreferences.getString("id","default");
 
-        if (id == "default") {
+        if (id.equals("default")) {
             id = UUID.randomUUID().toString();
             mEditor.putString("id",id);
             mEditor.commit();
