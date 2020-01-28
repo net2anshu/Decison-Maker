@@ -42,10 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.button3:
-                //startActivity(new Intent(this, EventListActivity.class));
-                Intent intent = new Intent(this,ChooseActivity.class);
-                intent.putExtra("event","ygV0MU");
-                startActivity(intent);
+                startActivity(new Intent(this, EventListActivity.class));
                 break;
 
             case R.id.button4:
