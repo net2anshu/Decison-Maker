@@ -34,18 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
         id = mPreferences.getString("id","default");
 
-        Log.i("DECISIONMAKER",id);
-
         if (id == "default") {
             id = UUID.randomUUID().toString();
             mEditor.putString("id",id);
             mEditor.commit();
         }
-
-        Log.i("DECISIONMAKER",id);
-
-
-
     }
 
     public void callIntent(View view) {
@@ -65,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button4:
                 finish();
                 break;
-
         }
 
     }
