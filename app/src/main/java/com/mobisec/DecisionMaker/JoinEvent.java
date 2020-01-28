@@ -52,7 +52,7 @@ public class JoinEvent extends Activity {
                         Toast.makeText(JoinEvent.this, "Event does not exist!", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(JoinEvent.this, "Forward to next view!", Toast.LENGTH_SHORT).show();
-                        // TODO
+                        
                     }
                 }
 
