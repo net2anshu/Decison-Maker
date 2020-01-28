@@ -3,12 +3,24 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="80dp"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="EVENT"
+            android:textSize="30sp" />
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,37 +33,16 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200pt"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/confirmButton"
             android:layout_width="match_parent"
-            android:layout_height="20pt"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/reassignbutton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="Reassign randomly" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="20pt"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/submitbutton"
-                android:layout_width="199dp"
-                android:layout_height="wrap_content"
-                android:text="Close" />
-
-            <Button
-                android:id="@+id/finalizebutton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Finalize" />
-        </LinearLayout>
-
+            android:layout_height="wrap_content"
+            android:text="Confirm" />
     </LinearLayout>
 
 </LinearLayout>
