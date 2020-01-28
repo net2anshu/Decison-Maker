@@ -1,4 +1,4 @@
-package com.mobisec.DecisionMaker;
+package com.mobisec.DecisionMaker.model;
 
 public class EventActivity {
 

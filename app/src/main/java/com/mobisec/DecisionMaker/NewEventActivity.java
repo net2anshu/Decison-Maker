@@ -1,7 +1,9 @@
 package com.mobisec.DecisionMaker;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,27 +13,35 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.mobisec.DecisionMaker.model.Event;
+import com.mobisec.DecisionMaker.model.EventActivity;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static com.google.firebase.database.FirebaseDatabase.getInstance;
 import static java.lang.Integer.parseInt;
 
 public class NewEventActivity extends Activity {
 
     private List<EventActivity> activities;
 
+    String eventId;
+    TextView name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_event_activity);
 
-        String eventId = RandomUtils.randomString(6);
+        eventId = RandomUtils.randomString(6);
 
         TextView codeTextView = findViewById(R.id.codeTextView);
         codeTextView.setText(eventId);
+
+        name = findViewById(R.id.namefield);
 
         activities = new ArrayList<>();
         activities.add(new EventActivity("Test", 1, 10));
@@ -54,6 +64,19 @@ public class NewEventActivity extends Activity {
         }
 
         shuffle.setOnClickListener(view -> reassignRandomly());
+
+        Button submit = findViewById(R.id.finalizebutton);
+        submit.setOnClickListener(view -> submit());
+    }
+
+    private void submit() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String id = pref.getString("id", "");
+
+        Event event = new Event(eventId, name.getText().toString(), activities, id);
+        getInstance().getReference("Events").child(eventId).setValue(event);
+
+        finish();
     }
 
     private void reassignRandomly() {

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mobisec.DecisionMaker.model.EventActivity;
+
 import java.util.List;
 
 public class AddActivityListAdapter extends ArrayAdapter<EventActivity> {
