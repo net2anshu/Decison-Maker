@@ -1,4 +1,4 @@
-package com.mobisec.DecisionMaker;
+package com.mobisec.DecisionMaker.newevent;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mobisec.DecisionMaker.R;
 import com.mobisec.DecisionMaker.model.EventActivity;
 
 import java.util.List;

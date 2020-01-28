@@ -16,11 +16,14 @@ import android.widget.Toast;
 
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
+import com.mobisec.DecisionMaker.newevent.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -76,7 +79,20 @@ public class NewEventActivity extends Activity {
 
         List<String> ids = activities.stream().map(EventActivity::getId).collect(toList());
         Event event = new Event(eventId, name.getText().toString(), ids, userId);
-        getInstance().getReference("Events").child(eventId).setValue(event);
+        getInstance().getReference("events").child(eventId).setValue(event);
+
+        activities.forEach(eventActivity -> getInstance()
+                .getReference("activities")
+                .child(eventActivity.getId())
+                .setValue(eventActivity));
+
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> stringSet = mPreferences.getStringSet(Constants.USER_EVENTS, new HashSet<>());
+
+        SharedPreferences.Editor mEditor = mPreferences.edit();
+        stringSet.add(eventId);
+        mEditor.putStringSet(Constants.USER_EVENTS, stringSet);
+        mEditor.commit();
 
         Toast.makeText(this, "Event submitted", Toast.LENGTH_SHORT).show();
         finish();
