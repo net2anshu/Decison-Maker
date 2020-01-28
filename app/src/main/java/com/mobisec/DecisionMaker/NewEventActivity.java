@@ -48,6 +48,7 @@ public class NewEventActivity extends Activity {
     private String eventId;
     private TextView name;
     private Button shuffle;
+    private Button submit;
     private AddActivityListAdapter adapter;
 
     @Override
@@ -86,7 +87,12 @@ public class NewEventActivity extends Activity {
                                                     activities.add(value1);
                                                 }
                                             }
-                                            hasOverloadedActivities();
+                                            if (hasOverloadedActivities()) {
+                                                shuffle.setEnabled(true);
+                                            }
+                                            if (canFinalize()) {
+                                                submit.setEnabled(true);
+                                            }
                                             adapter.notifyDataSetChanged();
                                         }
 
@@ -115,11 +121,22 @@ public class NewEventActivity extends Activity {
 
         shuffle.setOnClickListener(view -> reassignRandomly());
 
-        Button submit = findViewById(R.id.finalizebutton);
+        submit = findViewById(R.id.finalizebutton);
         submit.setOnClickListener(view -> finalizeEvent());
+
+        if (canFinalize()) {
+            submit.setEnabled(true);
+        }
     }
 
     private void submit() {
+        save();
+
+        Toast.makeText(this, "Event submitted", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    private void save() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String userId = pref.getString(Constants.USER_ID, "");
 
@@ -139,9 +156,6 @@ public class NewEventActivity extends Activity {
         stringSet.add(eventId);
         mEditor.putStringSet(Constants.USER_EVENTS, stringSet);
         mEditor.commit();
-
-        Toast.makeText(this, "Event submitted", Toast.LENGTH_SHORT).show();
-        finish();
     }
 
     private void reassignRandomly() {
@@ -185,16 +199,28 @@ public class NewEventActivity extends Activity {
     }
 
     private void finalizeEvent() {
-        // TODO
+        Toast.makeText(this, "Event finalized", Toast.LENGTH_SHORT).show();
+        save();
+        // TODO: Intent
     }
 
-    private void hasOverloadedActivities() {
+    private boolean hasOverloadedActivities() {
         for (EventActivity a : activities) {
             if (a.getRegistered() > a.getAvailable()) {
-                shuffle.setEnabled(true);
-                return;
+                return true;
             }
         }
+        return false;
+    }
+
+    private boolean canFinalize() {
+        int reg = 0;
+        int total = 0;
+        for (EventActivity a : activities) {
+            reg += a.getRegistered();
+            total += a.getAvailable();
+        }
+        return total > reg && !hasOverloadedActivities();
     }
 
     public void popup(View view) {
@@ -219,6 +245,9 @@ public class NewEventActivity extends Activity {
             activities.add(eventActivity);
 
             popupWindow.dismiss();
+            if (canFinalize()) {
+                submit.setEnabled(true);
+            }
         });
     }
 
