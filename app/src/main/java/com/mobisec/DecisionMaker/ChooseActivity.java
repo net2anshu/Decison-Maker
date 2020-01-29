@@ -126,7 +126,8 @@ public class ChooseActivity extends Activity {
             Toast.makeText(
                     ChooseActivity.this,
                     "Activity " + read_activity.getName() + " chosen",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            ).show();
 
             eventActivity.getregisteredUsers().add(userId);
             myRef2.child(eventActivity.getId()).setValue(eventActivity);
@@ -136,7 +137,6 @@ public class ChooseActivity extends Activity {
             set.add(actual_event.getId());
             SharedPreferences.Editor mEditor = mPreferences1.edit();
             mEditor.putStringSet(Constants.USER_EVENTS, set);
-            Toast.makeText(ChooseActivity.this, set.toString(),Toast.LENGTH_SHORT).show();
             mEditor.commit();
 
             finish();

@@ -27,6 +27,7 @@ import com.mobisec.DecisionMaker.utils.RandomUtils;
 import com.mobisec.DecisionMaker.utils.SimpleValueListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -165,20 +166,17 @@ public class NewEventActivity extends Activity {
     }
 
     private void doReassigning() {
-        List<String> users = new ArrayList<>();
-        for (EventActivity ea : activities) {
-            int over = ea.getRegistered() - ea.getAvailable();
-            if (over > 0) {
-                List<String> regUsers = ea.getregisteredUsers();
-                Collections.shuffle(regUsers);
-                List<String> sub = regUsers.subList(0, over);
-                users.addAll(sub);
-                regUsers.removeAll(sub);
-            }
-        }
+        List<String> users = activities.stream()
+                .map(EventActivity::getregisteredUsers)
+                .flatMap(Collection::stream)
+                .collect(toList());
+
+        Collections.shuffle(users);
 
         Stack<String> stack = new Stack<>();
         stack.addAll(users);
+
+        activities.forEach(activity -> activity.setregisteredUsers(new ArrayList<>()));
 
         boolean run = true;
         while (run) {
@@ -193,6 +191,7 @@ public class NewEventActivity extends Activity {
             }
         }
 
+        save();
         adapter.notifyDataSetChanged();
     }
 
@@ -201,6 +200,7 @@ public class NewEventActivity extends Activity {
         Event event = save();
         event.setFinalized(true);
         getInstance().getReference("events").child(eventId).setValue(event);
+        startActivity(new Intent(NewEventActivity.this, MainActivity.class));
     }
 
     private boolean hasOverloadedActivities() {

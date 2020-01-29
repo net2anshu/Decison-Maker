@@ -48,14 +48,14 @@ public class EventActivity {
 
     public int getRegistered() {
         if (isNull(registeredUsers)) {
-            return 0;
+            this.registeredUsers = new ArrayList<>();
         }
         return registeredUsers.size();
     }
 
     public List<String> getregisteredUsers() {
         if (isNull(registeredUsers)) {
-            registeredUsers = new ArrayList<>();
+            this.registeredUsers = new ArrayList<>();
         }
         return registeredUsers;
     }
