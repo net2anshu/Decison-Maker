@@ -65,12 +65,12 @@ public class ChooseActivity extends Activity {
             eventActivity = activities.get(position);
 
             if (!color){
-                view.setBackgroundColor(Color.CYAN);
+                view.setBackgroundColor(Color.YELLOW);
                 previousView = view;
                 color = true;
             } else {
-                previousView.setBackgroundColor(Color.WHITE);
-                view.setBackgroundColor(Color.CYAN);
+                previousView.setBackgroundColor(Color.DKGRAY);
+                view.setBackgroundColor(Color.YELLOW);
                 previousView = view;
             }
         });
@@ -141,7 +141,6 @@ public class ChooseActivity extends Activity {
             set.add(actual_event.getId());
             SharedPreferences.Editor mEditor = mPreferences1.edit();
             mEditor.putStringSet(Constants.USER_EVENTS, set);
-            Toast.makeText(ChooseActivity.this, set.toString(),Toast.LENGTH_SHORT).show();
             mEditor.commit();
 
             finish();
