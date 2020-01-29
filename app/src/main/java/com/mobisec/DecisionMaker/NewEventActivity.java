@@ -121,9 +121,9 @@ public class NewEventActivity extends Activity {
         submit = findViewById(R.id.finalizebutton);
         submit.setOnClickListener(view -> finalizeEvent());
 
-        if (canFinalize()) {
+        //if (canFinalize()) {
             submit.setEnabled(true);
-        }
+        //}
     }
 
     private void submit() {
