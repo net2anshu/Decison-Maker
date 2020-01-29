@@ -15,12 +15,19 @@
             android:layout_weight="1"
             android:text="name" />
 
-        <TextView
-            android:id="@+id/activityparticipants"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="6dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="0/0" />
+            android:text="Admin" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User" />
 
     </LinearLayout>
 
