@@ -19,13 +19,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
-import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
+import com.mobisec.DecisionMaker.utils.SimpleValueListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,6 +50,7 @@ public class NewEventActivity extends Activity {
     private Button shuffle;
     private Button submit;
     private AddActivityListAdapter adapter;
+    private boolean isFinalized;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +72,15 @@ public class NewEventActivity extends Activity {
             eventId = stringExtra;
             getInstance().getReference("events")
                     .child(eventId)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new SimpleValueListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Event value = dataSnapshot.getValue(Event.class);
                             name.setText(value.getName());
+                            isFinalized = value.isFinalized();
 
                             getInstance().getReference("activities")
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    .addListenerForSingleValueEvent(new SimpleValueListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -97,14 +98,10 @@ public class NewEventActivity extends Activity {
                                             adapter.notifyDataSetChanged();
                                         }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
                                     });
 
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {}
                     });
         }
 
@@ -136,7 +133,7 @@ public class NewEventActivity extends Activity {
         startActivity(new Intent(NewEventActivity.this, MainActivity.class));
     }
 
-    private void save() {
+    private Event save() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String userId = pref.getString(Constants.USER_ID, "");
 
@@ -156,6 +153,7 @@ public class NewEventActivity extends Activity {
         stringSet.add(eventId);
         mEditor.putStringSet(Constants.USER_EVENTS, stringSet);
         mEditor.commit();
+        return event;
     }
 
     private void reassignRandomly() {
@@ -178,9 +176,7 @@ public class NewEventActivity extends Activity {
         Stack<String> stack = new Stack<>();
         stack.addAll(users);
 
-        activities.forEach(activity -> {
-            activity.setregisteredUsers(new ArrayList<>());
-        });
+        activities.forEach(activity -> activity.setregisteredUsers(new ArrayList<>()));
 
         boolean run = true;
         while (run) {
@@ -195,13 +191,16 @@ public class NewEventActivity extends Activity {
             }
         }
 
+        save();
         adapter.notifyDataSetChanged();
     }
 
     private void finalizeEvent() {
         Toast.makeText(this, "Event finalized", Toast.LENGTH_SHORT).show();
-        save();
-        // TODO: Intent
+        Event event = save();
+        event.setFinalized(true);
+        getInstance().getReference("events").child(eventId).setValue(event);
+        startActivity(new Intent(NewEventActivity.this, MainActivity.class));
     }
 
     private boolean hasOverloadedActivities() {
@@ -214,6 +213,10 @@ public class NewEventActivity extends Activity {
     }
 
     private boolean canFinalize() {
+        if (isFinalized) {
+            return false;
+        }
+
         int reg = 0;
         int total = 0;
         for (EventActivity a : activities) {

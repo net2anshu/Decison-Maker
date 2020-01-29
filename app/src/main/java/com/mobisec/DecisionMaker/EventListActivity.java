@@ -8,16 +8,13 @@ import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.adapter.AddEventListAdapter;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.utils.Constants;
+import com.mobisec.DecisionMaker.utils.SimpleValueListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +42,7 @@ public class EventListActivity extends Activity {
 
         final ArrayList<Event> eventsArray = new ArrayList<>();
         final AddEventListAdapter adapter = new AddEventListAdapter(this, eventsArray);
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addValueEventListener(new SimpleValueListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot val : dataSnapshot.getChildren()){
@@ -55,11 +52,6 @@ public class EventListActivity extends Activity {
                         adapter.notifyDataSetInvalidated();
                     }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 

@@ -15,14 +15,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
 import com.mobisec.DecisionMaker.utils.Constants;
+import com.mobisec.DecisionMaker.utils.SimpleValueListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -77,7 +76,7 @@ public class ChooseActivity extends Activity {
 
         String eventIntent = getIntent().getStringExtra("event");
 
-        myRef1.addValueEventListener(new ValueEventListener() {
+        myRef1.addValueEventListener(new SimpleValueListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 activities.clear();
@@ -95,7 +94,7 @@ public class ChooseActivity extends Activity {
 
                 }
 
-                myRef2.addValueEventListener(new ValueEventListener() {
+                myRef2.addValueEventListener(new SimpleValueListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         activities.clear();
@@ -118,20 +117,17 @@ public class ChooseActivity extends Activity {
                         }
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
 
         button.setOnClickListener(view -> {
             Toast.makeText(
                     ChooseActivity.this,
                     "Activity " + read_activity.getName() + " chosen",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            ).show();
 
             eventActivity.getregisteredUsers().add(userId);
             myRef2.child(eventActivity.getId()).setValue(eventActivity);

@@ -47,7 +47,7 @@ public class AddEventListAdapter extends ArrayAdapter<Event> {
 
         Button button = convertView.findViewById(R.id.button1);
         button.setEnabled(false);
-        if (check_ID.equals(local_ID)) {
+        if (check_ID.equals(local_ID) && !event.isFinalized()) {
             button.setEnabled(true);
             button.setOnClickListener(v -> {
                 Intent intent = new Intent(context, NewEventActivity.class);

@@ -9,12 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
 import com.mobisec.DecisionMaker.model.User;
+import com.mobisec.DecisionMaker.utils.SimpleValueListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,14 +36,14 @@ public class FinalizedActivity extends Activity {
 
         getInstance().getReference("events")
                 .child(eventId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new SimpleValueListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Event event = dataSnapshot.getValue(Event.class);
                         parseEvent(event);
 
                         getInstance().getReference("activities")
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                .addListenerForSingleValueEvent(new SimpleValueListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -57,13 +56,9 @@ public class FinalizedActivity extends Activity {
                                         adapter.notifyDataSetChanged();
                                     }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                                 });
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
 
         Intent i = new Intent(this, MainActivity.class);
@@ -76,14 +71,13 @@ public class FinalizedActivity extends Activity {
             EventActivity eventActivity = activities.get(i1);
             List<String> strings = eventActivity.getregisteredUsers();
             getInstance().getReference("users")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new SimpleValueListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             List<User> users = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 User value = snapshot.getValue(User.class);
-                                users.add(value);
-                                if (strings.contains(value.getId())) {
+                                if (strings != null && strings.contains(value.getId())) {
                                     users.add(value);
                                 }
                             }
@@ -92,8 +86,6 @@ public class FinalizedActivity extends Activity {
                             }
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {}
                     });
         });
     }
