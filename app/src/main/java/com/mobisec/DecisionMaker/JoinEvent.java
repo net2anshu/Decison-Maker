@@ -19,8 +19,11 @@ import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.User;
 import com.mobisec.DecisionMaker.utils.Constants;
 
+import java.util.Optional;
+import java.util.Spliterator;
+
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
-import static java.util.Objects.isNull;
+import static java.util.stream.StreamSupport.stream;
 
 public class JoinEvent extends Activity {
 
@@ -48,12 +51,17 @@ public class JoinEvent extends Activity {
             ValueEventListener eventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Event e = dataSnapshot.child(eventId).getValue(Event.class);
-                    if (isNull(e.getId())) {
+                    Spliterator<DataSnapshot> spliterator = dataSnapshot.getChildren().spliterator();
+                    Optional<Event> eventOpt = stream(spliterator, false)
+                            .map(i -> i.getValue(Event.class))
+                            .filter(i -> i.getId().equals(eventId))
+                            .findFirst();
+
+                    if (!eventOpt.isPresent()) {
                         Toast.makeText(JoinEvent.this, "Event does not exist!", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent intent = new Intent(JoinEvent.this, ChooseActivity.class);
-                        intent.putExtra("event", e.getId());
+                        intent.putExtra("event", eventOpt.get().getId());
                         startActivity(intent);
                     }
                 }

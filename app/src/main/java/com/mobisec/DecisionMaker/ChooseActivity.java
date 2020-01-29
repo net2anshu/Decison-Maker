@@ -1,6 +1,7 @@
 package com.mobisec.DecisionMaker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -115,22 +116,20 @@ public class ChooseActivity extends Activity {
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
 
         button.setOnClickListener(view -> {
-            Toast.makeText(ChooseActivity.this,
-                    "Activity " + read_activity.getName() + " chosen", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(
+                    ChooseActivity.this,
+                    "Activity " + read_activity.getName() + " chosen",
+                    Toast.LENGTH_SHORT).show();
+
             eventActivity.getregisteredUsers().add(userId);
             myRef2.child(eventActivity.getId()).setValue(eventActivity);
 
@@ -140,7 +139,9 @@ public class ChooseActivity extends Activity {
             SharedPreferences.Editor mEditor = mPreferences1.edit();
             mEditor.putStringSet(Constants.USER_EVENTS, set);
             mEditor.commit();
+
             finish();
+            startActivity(new Intent(ChooseActivity.this, MainActivity.class));
         });
     }
 }
