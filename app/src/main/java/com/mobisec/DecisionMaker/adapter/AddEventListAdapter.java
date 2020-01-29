@@ -1,9 +1,8 @@
-package com.mobisec.DecisionMaker.newevent;
+package com.mobisec.DecisionMaker.adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mobisec.DecisionMaker.EventListActivity;
-import com.mobisec.DecisionMaker.JoinEvent;
 import com.mobisec.DecisionMaker.MainActivity;
 import com.mobisec.DecisionMaker.NewEventActivity;
 import com.mobisec.DecisionMaker.R;
 import com.mobisec.DecisionMaker.model.Event;
-import com.mobisec.DecisionMaker.model.EventActivity;
 import com.mobisec.DecisionMaker.utils.Constants;
 
 import java.util.List;
-
-import static androidx.core.content.ContextCompat.startActivity;
 
 public class AddEventListAdapter extends ArrayAdapter<Event> {
 
