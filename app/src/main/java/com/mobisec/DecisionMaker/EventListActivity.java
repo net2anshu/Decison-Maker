@@ -50,10 +50,12 @@ public class EventListActivity extends Activity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("events");
 
-        Set<String> test = new HashSet<String>();           // To Do
+        /*Set<String> test = new HashSet<String>();           // To Do
         test.add("ygV0MU");                                   // Change with string set in for loop below for preference
         test.add("zG3a8S");
-        test.add("fgsaqf");
+        test.add("cvybmI");
+        test.add("fgsaqf");*/
+
 
 
         final ArrayList<Event> eventsArray = new ArrayList<Event>();
@@ -62,7 +64,7 @@ public class EventListActivity extends Activity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot val : dataSnapshot.getChildren()){
-                    if (test.contains(val.getKey())){
+                    if (stringSet.contains(val.getKey())){
                         Event read_event = val.getValue(Event.class);
                         eventsArray.add(read_event);
                         adapter.notifyDataSetInvalidated();
