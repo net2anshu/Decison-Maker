@@ -1,14 +1,15 @@
 package com.mobisec.DecisionMaker.model;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 public class EventActivity {
 
     private String id;
     private String name;
     private int available;
-    private List<String> registeredUsers = new ArrayList<>();
+    private List<String> registeredUsers;
 
     public EventActivity() {
     }
@@ -45,6 +46,9 @@ public class EventActivity {
     }
 
     public int getRegistered() {
+        if (isNull(registeredUsers)) {
+            return 0;
+        }
         return registeredUsers.size();
     }
 

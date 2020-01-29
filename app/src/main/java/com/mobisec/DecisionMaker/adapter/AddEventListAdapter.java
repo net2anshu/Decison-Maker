@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mobisec.DecisionMaker.MainActivity;
+import com.mobisec.DecisionMaker.FinalizedActivity;
 import com.mobisec.DecisionMaker.NewEventActivity;
 import com.mobisec.DecisionMaker.R;
 import com.mobisec.DecisionMaker.model.Event;
@@ -24,11 +24,11 @@ import java.util.List;
 
 public class AddEventListAdapter extends ArrayAdapter<Event> {
 
-    Context context;
+    private Context context;
 
     public AddEventListAdapter(@NonNull Context context, @NonNull List<Event> objects) {
         super(context, 0, objects);
-
+        this.context = context;
     }
 
     @NonNull
@@ -49,28 +49,22 @@ public class AddEventListAdapter extends ArrayAdapter<Event> {
         button.setEnabled(false);
         if (check_ID.equals(local_ID)) {
             button.setEnabled(true);
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), NewEventActivity.class);
-                    intent.putExtra("event", event.getId());
-                    getContext().startActivity(intent);
-                }
+            button.setOnClickListener(v -> {
+                Intent intent = new Intent(context, NewEventActivity.class);
+                intent.putExtra("event", event.getId());
+                getContext().startActivity(intent);
             });
         }
 
         boolean status = event.isFinalized();
-        Button button2 = convertView.findViewById(R.id.button2); //User button implemention
+        Button button2 = convertView.findViewById(R.id.button2);
         button2.setEnabled(false);
         if (status) {
             button2.setEnabled(true);
 
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // To do
-                    Intent intent = new Intent(getContext(), MainActivity.class)
-                            .putExtra("event", event.getId());
-                    getContext().startActivity(intent);
-                }
+            button2.setOnClickListener(v -> {
+                Intent intent = new Intent(context, FinalizedActivity.class).putExtra("event", event.getId());
+                context.startActivity(intent);
             });
         }
 
