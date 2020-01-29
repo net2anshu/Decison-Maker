@@ -39,6 +39,8 @@ public class ChooseActivity extends Activity {
     String userId;
     EventActivity eventActivity;
     EventActivity read_activity;
+    Event read_event;
+    Event actual_event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +84,12 @@ public class ChooseActivity extends Activity {
                 adapter.clear();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Event read_event = snapshot.getValue(Event.class);
+                     read_event = snapshot.getValue(Event.class);
                     String eventId = read_event.getId();
                     if (eventId.equals(eventIntent)) {
                         ActivityIds = read_event.getActivities();
                         EventName.setText(read_event.getName());
+                        actual_event = read_event;
                     }
                     adapter.notifyDataSetChanged();
 
@@ -135,9 +138,10 @@ public class ChooseActivity extends Activity {
 
             SharedPreferences mPreferences1 = PreferenceManager.getDefaultSharedPreferences(ChooseActivity.this);
             Set<String> set = mPreferences1.getStringSet(Constants.USER_EVENTS, new HashSet<>());
-            set.add(eventActivity.getId());
+            set.add(actual_event.getId());
             SharedPreferences.Editor mEditor = mPreferences1.edit();
             mEditor.putStringSet(Constants.USER_EVENTS, set);
+            Toast.makeText(ChooseActivity.this, set.toString(),Toast.LENGTH_SHORT).show();
             mEditor.commit();
 
             finish();
