@@ -60,9 +60,14 @@ public class JoinEvent extends Activity {
                     if (!eventOpt.isPresent()) {
                         Toast.makeText(JoinEvent.this, "Event does not exist!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(JoinEvent.this, ChooseActivity.class);
-                        intent.putExtra("event", eventOpt.get().getId());
-                        startActivity(intent);
+                        Event event = eventOpt.get();
+                        if (event.isFinalized()) {
+                            Toast.makeText(JoinEvent.this, "Event is already finalized!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(JoinEvent.this, ChooseActivity.class);
+                            intent.putExtra("event", event.getId());
+                            startActivity(intent);
+                        }
                     }
                 }
 

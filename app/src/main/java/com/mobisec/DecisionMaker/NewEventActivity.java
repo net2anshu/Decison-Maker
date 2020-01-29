@@ -51,6 +51,7 @@ public class NewEventActivity extends Activity {
     private Button shuffle;
     private Button submit;
     private AddActivityListAdapter adapter;
+    private boolean isFinalized;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class NewEventActivity extends Activity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Event value = dataSnapshot.getValue(Event.class);
                             name.setText(value.getName());
+                            isFinalized = value.isFinalized();
 
                             getInstance().getReference("activities")
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -136,7 +138,7 @@ public class NewEventActivity extends Activity {
         startActivity(new Intent(NewEventActivity.this, MainActivity.class));
     }
 
-    private void save() {
+    private Event save() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String userId = pref.getString(Constants.USER_ID, "");
 
@@ -156,6 +158,7 @@ public class NewEventActivity extends Activity {
         stringSet.add(eventId);
         mEditor.putStringSet(Constants.USER_EVENTS, stringSet);
         mEditor.commit();
+        return event;
     }
 
     private void reassignRandomly() {
@@ -200,8 +203,9 @@ public class NewEventActivity extends Activity {
 
     private void finalizeEvent() {
         Toast.makeText(this, "Event finalized", Toast.LENGTH_SHORT).show();
-        save();
-        // TODO: Intent
+        Event event = save();
+        event.setFinalized(true);
+        getInstance().getReference("events").child(eventId).setValue(event);
     }
 
     private boolean hasOverloadedActivities() {
@@ -214,6 +218,10 @@ public class NewEventActivity extends Activity {
     }
 
     private boolean canFinalize() {
+        if (isFinalized) {
+            return false;
+        }
+
         int reg = 0;
         int total = 0;
         for (EventActivity a : activities) {

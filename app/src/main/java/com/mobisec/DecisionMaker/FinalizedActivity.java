@@ -82,8 +82,7 @@ public class FinalizedActivity extends Activity {
                             List<User> users = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 User value = snapshot.getValue(User.class);
-                                users.add(value);
-                                if (strings.contains(value.getId())) {
+                                if (strings != null && strings.contains(value.getId())) {
                                     users.add(value);
                                 }
                             }
