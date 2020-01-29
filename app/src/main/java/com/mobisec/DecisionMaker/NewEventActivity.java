@@ -19,13 +19,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
 import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
+import com.mobisec.DecisionMaker.utils.SimpleValueListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +71,7 @@ public class NewEventActivity extends Activity {
             eventId = stringExtra;
             getInstance().getReference("events")
                     .child(eventId)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new SimpleValueListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Event value = dataSnapshot.getValue(Event.class);
@@ -80,7 +79,7 @@ public class NewEventActivity extends Activity {
                             isFinalized = value.isFinalized();
 
                             getInstance().getReference("activities")
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    .addListenerForSingleValueEvent(new SimpleValueListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -98,14 +97,10 @@ public class NewEventActivity extends Activity {
                                             adapter.notifyDataSetChanged();
                                         }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
                                     });
 
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {}
                     });
         }
 
