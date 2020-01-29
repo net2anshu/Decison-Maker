@@ -21,7 +21,9 @@
         <activity android:name=".JoinEvent" />
         <activity android:name=".NewEventActivity"/>
         <activity android:name=".EventListActivity"/>
+        <activity android:name=".FinalizedActivity"/>
         <activity android:name=".ChooseActivity"/>
+        <activity android:name=".FinalPopupActivity"/>
     </application>
 
 </manifest>

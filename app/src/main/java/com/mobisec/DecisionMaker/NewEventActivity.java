@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
-import com.mobisec.DecisionMaker.newevent.AddActivityListAdapter;
+import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
 
@@ -99,7 +99,6 @@ public class NewEventActivity extends Activity {
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {}
                                     });
-
 
                         }
 

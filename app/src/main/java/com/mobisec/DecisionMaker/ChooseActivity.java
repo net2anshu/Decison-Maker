@@ -1,13 +1,11 @@
 package com.mobisec.DecisionMaker;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,11 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
-import com.mobisec.DecisionMaker.newevent.AddActivityListAdapter;
+import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ChooseActivity extends Activity {
