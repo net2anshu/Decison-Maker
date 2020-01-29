@@ -21,14 +21,13 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.model.Event;
 import com.mobisec.DecisionMaker.model.EventActivity;
-import com.mobisec.DecisionMaker.adapter.AddActivityListAdapter;
 import com.mobisec.DecisionMaker.utils.Constants;
 import com.mobisec.DecisionMaker.utils.RandomUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -171,19 +170,20 @@ public class NewEventActivity extends Activity {
     }
 
     private void doReassigning() {
-        List<String> users = activities.stream()
-                .map(EventActivity::getregisteredUsers)
-                .flatMap(Collection::stream)
-                .collect(toList());
-
-        Collections.shuffle(users);
+        List<String> users = new ArrayList<>();
+        for (EventActivity ea : activities) {
+            int over = ea.getRegistered() - ea.getAvailable();
+            if (over > 0) {
+                List<String> regUsers = ea.getregisteredUsers();
+                Collections.shuffle(regUsers);
+                List<String> sub = regUsers.subList(0, over);
+                users.addAll(sub);
+                regUsers.removeAll(sub);
+            }
+        }
 
         Stack<String> stack = new Stack<>();
         stack.addAll(users);
-
-        activities.forEach(activity -> {
-            activity.setregisteredUsers(new ArrayList<>());
-        });
 
         boolean run = true;
         while (run) {
