@@ -32,8 +32,8 @@ public class EventListActivity extends Activity {
 
         Button btnAdd = findViewById(R.id.button_home);
         btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            getApplicationContext().startActivity(intent);
+            Intent intent = new Intent(EventListActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
 
