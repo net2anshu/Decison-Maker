@@ -161,6 +161,8 @@ public class ChooseActivity extends Activity {
                         .show();
                 eventActivity.getregisteredUsers().add(userId);
                 myRef2.child(eventActivity.getId()).setValue(eventActivity);
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                getApplicationContext().startActivity(intent);
                 finish();
             }
         });

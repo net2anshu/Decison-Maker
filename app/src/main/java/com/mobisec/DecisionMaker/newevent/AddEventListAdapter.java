@@ -74,7 +74,7 @@ public class AddEventListAdapter extends ArrayAdapter<Event> {
                 public void onClick(View v) {
                     // To do
                     Intent intent = new Intent(getContext(), MainActivity.class)
-                            .putExtra("eventID", event.getId());
+                            .putExtra("event", event.getId());
                     getContext().startActivity(intent);
                 }
             });
