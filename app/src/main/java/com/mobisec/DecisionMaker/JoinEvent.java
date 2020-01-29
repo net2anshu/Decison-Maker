@@ -1,6 +1,7 @@
 package com.mobisec.DecisionMaker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,31 +30,31 @@ public class JoinEvent extends Activity {
         setContentView(R.layout.layout);
 
         Button join = findViewById(R.id.button2);
-        final EditText name = findViewById(R.id.editText);
-        final String playerName = name.getText().toString();
-
-        final EditText event = findViewById(R.id.editText);
-        final String eventName = event.getText().toString();
+        EditText name = findViewById(R.id.editText);
+        EditText event = findViewById(R.id.editText2);
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(JoinEvent.this);
         String userId = mPrefs.getString(Constants.USER_ID, null);
 
         join.setOnClickListener(view -> {
+            String eventId = event.getText().toString();
+            String playerName = name.getText().toString();
+
             User user = new User(userId, playerName);
             getInstance().getReference("users").child(userId).setValue(user);
 
-            DatabaseReference eventRef = getInstance().getReference("events").child(eventName);
+            DatabaseReference db = getInstance().getReference().child("events");
 
             ValueEventListener eventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Event e = dataSnapshot.getValue(Event.class);
-                    if (isNull(e)) {
+                    Event e = dataSnapshot.child(eventId).getValue(Event.class);
+                    if (isNull(e.getId())) {
                         Toast.makeText(JoinEvent.this, "Event does not exist!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(JoinEvent.this, "Forward to next view!", Toast.LENGTH_SHORT).show();
-                        // TODO: Forward with an intent
-
+                        Intent intent = new Intent(JoinEvent.this, ChooseActivity.class);
+                        intent.putExtra("event", e.getId());
+                        startActivity(intent);
                     }
                 }
 
@@ -61,7 +62,7 @@ public class JoinEvent extends Activity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {}
             };
 
-            eventRef.addListenerForSingleValueEvent(eventListener);
+            db.addListenerForSingleValueEvent(eventListener);
         });
     }
 
