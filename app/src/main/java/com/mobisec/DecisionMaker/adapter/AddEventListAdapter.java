@@ -52,14 +52,14 @@ public class AddEventListAdapter extends ArrayAdapter<Event> {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), NewEventActivity.class);
-                    intent.putExtra("eventID", event.getId());
+                    intent.putExtra("event", event.getId());
                     getContext().startActivity(intent);
                 }
             });
         }
 
         boolean status = event.isFinalized();
-        Button button2 = convertView.findViewById(R.id.button2);         //User button implemention
+        Button button2 = convertView.findViewById(R.id.button2); //User button implemention
         button2.setEnabled(false);
         if (status) {
             button2.setEnabled(true);
@@ -68,7 +68,7 @@ public class AddEventListAdapter extends ArrayAdapter<Event> {
                 public void onClick(View v) {
                     // To do
                     Intent intent = new Intent(getContext(), MainActivity.class)
-                            .putExtra("eventID", event.getId());
+                            .putExtra("event", event.getId());
                     getContext().startActivity(intent);
                 }
             });

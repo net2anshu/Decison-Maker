@@ -2,6 +2,7 @@ package com.mobisec.DecisionMaker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -132,7 +133,7 @@ public class NewEventActivity extends Activity {
         save();
 
         Toast.makeText(this, "Event submitted", Toast.LENGTH_SHORT).show();
-        finish();
+        startActivity(new Intent(NewEventActivity.this, MainActivity.class));
     }
 
     private void save() {

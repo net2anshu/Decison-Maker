@@ -1,5 +1,6 @@
 package com.mobisec.DecisionMaker.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventActivity {
@@ -7,7 +8,7 @@ public class EventActivity {
     private String id;
     private String name;
     private int available;
-    private List<String> registeredUsers;
+    private List<String> registeredUsers = new ArrayList<>();
 
     public EventActivity() {
     }

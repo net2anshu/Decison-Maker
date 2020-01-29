@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -31,12 +30,10 @@ public class EventListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventlist);
 
-        Button btnAdd = (Button)findViewById(R.id.button_home);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                getApplicationContext().startActivity(intent);
-            }
+        Button btnAdd = findViewById(R.id.button_home);
+        btnAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            getApplicationContext().startActivity(intent);
         });
 
 
@@ -46,15 +43,7 @@ public class EventListActivity extends Activity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("events");
 
-        /*Set<String> test = new HashSet<String>();           // To Do
-        test.add("ygV0MU");                                   // Change with string set in for loop below for preference
-        test.add("zG3a8S");
-        test.add("cvybmI");
-        test.add("fgsaqf");*/
-
-
-
-        final ArrayList<Event> eventsArray = new ArrayList<Event>();
+        final ArrayList<Event> eventsArray = new ArrayList<>();
         final AddEventListAdapter adapter = new AddEventListAdapter(this, eventsArray);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
