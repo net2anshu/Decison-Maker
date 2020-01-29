@@ -20,6 +20,7 @@ public class AddActivityListAdapter extends ArrayAdapter<EventActivity> {
 
     public AddActivityListAdapter(@NonNull Context context, @NonNull List<EventActivity> objects) {
         super(context, 0, objects);
+
     }
 
     @NonNull
