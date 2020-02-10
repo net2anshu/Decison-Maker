@@ -125,7 +125,7 @@ public class ChooseActivity extends Activity {
         button.setOnClickListener(view -> {
             Toast.makeText(
                     ChooseActivity.this,
-                    "Activity " + read_activity.getName() + " chosen",
+                    "Activity chosen",
                     Toast.LENGTH_SHORT
             ).show();
 
