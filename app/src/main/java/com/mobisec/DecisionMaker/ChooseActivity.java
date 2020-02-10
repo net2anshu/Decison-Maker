@@ -64,12 +64,12 @@ public class ChooseActivity extends Activity {
             eventActivity = activities.get(position);
 
             if (!color){
-                view.setBackgroundColor(Color.CYAN);
+                view.setBackgroundColor(Color.YELLOW);
                 previousView = view;
                 color = true;
             } else {
-                previousView.setBackgroundColor(Color.WHITE);
-                view.setBackgroundColor(Color.CYAN);
+                previousView.setBackgroundColor(Color.DKGRAY);
+                view.setBackgroundColor(Color.YELLOW);
                 previousView = view;
             }
         });
